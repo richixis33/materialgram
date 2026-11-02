@@ -2505,6 +2505,22 @@ void MainWidget::dialogsToUp() {
 	}
 }
 
+void MainWidget::toggleDialogsVisibility() {
+	if (!_dialogs) return;
+	const auto nochat = !_controller->mainSectionShown();
+	if (nochat && _dialogsWidth == 0) return;
+	if (_savedDialogsWidth <= 0) {
+		_savedDialogsWidth = _dialogsWidth > 0 ? _dialogsWidth : st::columnMinimalWidthLeft;
+	}
+	if (_dialogsWidth > 0) {
+		_savedDialogsWidth = _dialogsWidth;
+		_dialogsWidth = 0;
+	} else {
+		_dialogsWidth = _savedDialogsWidth;
+	}
+	updateControlsGeometry();
+}
+
 void MainWidget::checkActivation() {
 	_history->checkActivation();
 	if (_mainSection) {

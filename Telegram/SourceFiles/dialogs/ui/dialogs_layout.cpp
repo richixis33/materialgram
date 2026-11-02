@@ -64,6 +64,15 @@ base::options::toggle DialogsMuteIcon({
 		"for muted chats.",
 });
 
+const char kOptionTransparentUnreadMessages[] = "transparent-unread-messages";
+
+base::options::toggle OptionTransparentUnreadMessages({
+	.id = kOptionTransparentUnreadMessages,
+	.name = "Hide / transparent unread messages in chat list",
+	.description = "Hides unread message previews with transparency in the dialogs list for privacy and cleaner Material Design.",
+	.defaultValue = true,
+});
+
 const auto kPsaBadgePrefix = "cloud_lng_badge_psa_";
 
 [[nodiscard]] bool ShowUserBotIcon(not_null<UserData*> user) {
@@ -1243,7 +1252,16 @@ void RowPainter::Paint(
 			if (forum || monoforum) {
 				rect.setHeight(context.st->topicsHeight + rect.height());
 			}
-			view->paint(p, rect, context);
+			const auto hasUnread = badgesState.unread || (badgesState.unreadCounter > 0);
+			if (hasUnread && OptionTransparentUnreadMessages.value()) {
+				const auto wasOpacity = p.opacity();
+				// Feature: unread message transparency/hide in chat list
+				p.setOpacity(0.0);
+				view->paint(p, rect, context);
+				p.setOpacity(wasOpacity);
+			} else {
+				view->paint(p, rect, context);
+			}
 		}
 	};
 	PaintRow(

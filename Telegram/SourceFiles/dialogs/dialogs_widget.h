@@ -238,6 +238,7 @@ private:
 	bool applySearchState(SearchState state);
 
 	void showCalendar();
+	void hideChatsList();
 	void showSearchFrom();
 	void showMainMenu();
 	void clearSearchCache(bool clearPosts);

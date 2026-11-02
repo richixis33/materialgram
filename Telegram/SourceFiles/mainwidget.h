@@ -134,6 +134,7 @@ public:
 	void windowShown();
 
 	void dialogsToUp();
+	void toggleDialogsVisibility();
 	void checkActivation();
 
 	[[nodiscard]] PeerData *peer() const;
@@ -344,6 +345,7 @@ private:
 	std::unique_ptr<Window::SlideAnimation> _showAnimation;
 
 	int _dialogsWidth = 0;
+	int _savedDialogsWidth = 0;
 	int _thirdColumnWidth = 0;
 	Ui::Animations::Simple _a_dialogsWidth;
 

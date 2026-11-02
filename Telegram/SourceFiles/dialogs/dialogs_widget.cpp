@@ -4377,6 +4377,10 @@ void Widget::clearSearchCache(bool clearPosts) {
 	cancelSearchRequest();
 }
 
+void Widget::hideChatsList() {
+	controller()->widget()->toggleDialogsVisibility();
+}
+
 void Widget::showCalendar() {
 	const auto chat = (!_searchState.inChat && _openedForum)
 		? Key(_openedForum->history())
