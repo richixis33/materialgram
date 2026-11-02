@@ -83,7 +83,7 @@ if not os.path.isdir(os.path.join(thirdPartyDir, keysLoc)):
     pathlib.Path(os.path.join(thirdPartyDir, keysLoc)).mkdir(parents=True, exist_ok=True)
 
 pathPrefixes = [
-    'ThirdParty\\msys64\\mingw64\\bin',
+    'ThirdParty\\msys64\\ucrt64\\bin',
     'ThirdParty\\jom',
     'ThirdParty\\gyp',
 ] if win else [
@@ -471,18 +471,18 @@ win:
     SET CHERE_INVOKING=enabled_from_arguments
     SET MSYS2_PATH_TYPE=inherit
 
-    powershell -Command "iwr -OutFile ./msys64.exe https://github.com/msys2/msys2-installer/releases/download/2025-08-30/msys2-base-x86_64-20250830.sfx.exe"
-    msys64.exe
+    powershell -Command "iwr -UseBasicParsing -OutFile ./msys64.exe https://github.com/msys2/msys2-installer/releases/download/2026-09-27/msys2-base-x86_64-20260927.sfx.exe"
+    msys64.exe -y
     del msys64.exe
 
     bash -c "pacman-key --init; pacman-key --populate; pacman -Syu --noconfirm"
     pacman -Syu --noconfirm ^
         make ^
-        mingw-w64-x86_64-diffutils ^
-        mingw-w64-x86_64-gperf ^
-        mingw-w64-x86_64-nasm ^
-        mingw-w64-x86_64-perl ^
-        mingw-w64-x86_64-pkgconf
+        mingw-w64-ucrt-x86_64-diffutils ^
+        mingw-w64-ucrt-x86_64-gperf ^
+        mingw-w64-ucrt-x86_64-nasm ^
+        mingw-w64-ucrt-x86_64-perl ^
+        mingw-w64-ucrt-x86_64-pkgconf
 """, 'ThirdParty')
 
 stage('python', """
@@ -497,12 +497,12 @@ win:
 stage('NuGet', """
 win:
     mkdir NuGet
-    powershell -Command "iwr -OutFile ./NuGet/nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
+    powershell -Command "iwr -UseBasicParsing -OutFile ./NuGet/nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
 """, 'ThirdParty')
 
 stage('jom', """
 win:
-    powershell -Command "iwr -OutFile ./jom.zip https://master.qt.io/official_releases/jom/jom_1_1_3.zip"
+    powershell -Command "iwr -UseBasicParsing -OutFile ./jom.zip https://master.qt.io/official_releases/jom/jom_1_1_3.zip"
     powershell -Command "Expand-Archive ./jom.zip"
     del jom.zip
 """, 'ThirdParty')
@@ -523,7 +523,7 @@ mac:
 rustToolchain = '1.96.1'
 stage('rust', """
 win:
-    powershell -Command "iwr -OutFile ./rustup-init.exe https://static.rust-lang.org/rustup/dist/x86_64-pc-windows-msvc/rustup-init.exe"
+    powershell -Command "iwr -UseBasicParsing -OutFile ./rustup-init.exe https://static.rust-lang.org/rustup/dist/x86_64-pc-windows-msvc/rustup-init.exe"
     SET "RUSTUP_HOME=%THIRDPARTY_DIR%\\rust\\rustup"
     SET "CARGO_HOME=%THIRDPARTY_DIR%\\rust\\cargo"
     rustup-init.exe -y --no-modify-path --profile minimal ^
